@@ -1,0 +1,28 @@
+@(textToParse: String, resultHtml: String)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Markdown to HTML</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+        <link rel="stylesheet" media="all" href="@routes.Assets.versioned("stylesheets/main.css")">
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="markdown-side">
+                <h2>Please enter the markdown data</h2>
+
+                <form id="markdown-form" action="@routes.Application.markdownParse" method="post">
+                    <textarea name="markdown-form" rows="25">@textToParse</textarea>
+                    <button>Parse</button>
+                </form>
+            </div>
+            <div class="result-side">
+                <h2>Result HTML:</h2>
+                <div class="result">
+                    <pre>@resultHtml</pre>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
