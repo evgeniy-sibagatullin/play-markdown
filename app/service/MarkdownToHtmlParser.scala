@@ -27,7 +27,7 @@ object MarkdownToHtmlParser extends RegexParsers {
     }
     catch {
       case ex: MarkdownToHtmlParserException => ex.message
-      case _ => "Something really bad happened under the hood. Please, start to pray and retry."
+      case _: Throwable => "Something really bad happened under the hood. Please, start to pray and retry."
     }
   }
 

@@ -3,9 +3,16 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.markdown
+GET         /                                controllers.ApplicationController.markdown
+GET         /signIn                          controllers.ApplicationController.signIn
+GET         /signOut                         controllers.ApplicationController.signOut
+GET         /signUp                          controllers.ApplicationController.signUp
+GET         /parseHistory                    controllers.ApplicationController.parseHistory
 
-POST    /                           controllers.Application.markdownParse
+POST        /parseMarkdown                   controllers.MarkdownController.parseMarkdown
+POST        /signUp                          controllers.SignUpController.signUp
+POST        /authenticate                    controllers.CredentialsAuthController.authenticate
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                    controllers.Assets.at(path="/public", file)
+GET         /webjars/*file                   controllers.WebJarAssets.at(file)

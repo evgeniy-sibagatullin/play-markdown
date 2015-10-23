@@ -1,28 +1,25 @@
-@(textToParse: String, resultHtml: String)
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Markdown to HTML</title>
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <link rel="stylesheet" media="all" href="@routes.Assets.versioned("stylesheets/main.css")">
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="markdown-side">
-                <h2>Please enter the markdown data</h2>
+@(markdownForm: Form[forms.MarkdownForm.Data], user: Option[models.User] = None, textToParse: String, resultHtml: String)(implicit request: RequestHeader, messages: Messages)
 
-                <form id="markdown-form" action="@routes.Application.markdownParse" method="post">
-                    <textarea name="markdown-form" rows="25">@textToParse</textarea>
-                    <button>Parse</button>
-                </form>
-            </div>
-            <div class="result-side">
-                <h2>Result HTML:</h2>
-                <div class="result">
-                    <pre>@resultHtml</pre>
+@import b3.inline.fieldConstructor
+
+@main(Messages("home.title"), user) {
+    <div class="markdown-container" xmlns="http://www.w3.org/1999/html">
+        <div class="markdown-half">
+            <legend>@Messages("markdown.enter.request")</legend>
+            @helper.form(action = routes.MarkdownController.parseMarkdown()) {
+                @helper.CSRF.formField
+                @b3.textarea(markdownForm("text"), '_hiddenLabel -> "", 'placeholder -> Messages("markdown.example.text"),
+                    'class -> "form-control input-lg", 'rows -> "12")
+                <div class="form-group">
+                    <div>
+                        <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.parse")</button>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
-    </body>
-</html>
+        <div class="markdown-half">
+            <legend>@Messages("markdown.result")</legend>
+            <pre>@resultHtml</pre>
+        </div>
+    </div>
+}
