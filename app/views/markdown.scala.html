@@ -9,7 +9,7 @@
             @helper.form(action = routes.MarkdownController.parseMarkdown()) {
                 @helper.CSRF.formField
                 @b3.textarea(markdownForm("text"), '_hiddenLabel -> "", 'placeholder -> Messages("markdown.example.text"),
-                    'class -> "form-control input-lg", 'rows -> "12")
+                    'class -> "form-control input-lg", 'rows -> "12", 'value -> textToParse)
                 <div class="form-group">
                     <div>
                         <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.parse")</button>
