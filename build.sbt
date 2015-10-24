@@ -1,8 +1,8 @@
 import scalariform.formatter.preferences._
 
-name := "play-silhouette-seed"
+name := "play-markdown"
 
-version := "3.0.0"
+version := "1.0.0"
 
 scalaVersion := "2.11.7"
 

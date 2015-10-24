@@ -1,9 +1,9 @@
 {
-  "name": "play-silhouette-seed",
-  "description": "Seed project to show how Silhouette can be implemented into a Play Framework application.",
+  "name": "play-markdown",
+  "description": "REST service that takes markdown-style text as a POST request body, and returns HTML.",
   "keywords": [
     "Play",
-    "Silhouette"
+    "Markdown"
   ],
   "website": "https://github.com/mohiva/play-silhouette-seed",
   "repository": "https://github.com/mohiva/play-silhouette-seed",
