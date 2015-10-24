@@ -1,1 +1,0 @@
-web: target/universal/stage/bin/play-markdown -Dhttp.port=${PORT} -Dconfig.resource=${PLAY_CONF_FILE}
