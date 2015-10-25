@@ -28,8 +28,9 @@ legend {
     font-size: 20px;
     padding: 15px;
 }
-a {
-    cursor: pointer;
+
+a.btn {
+    margin-top: 15px;
 }
 
 .provider {
@@ -79,7 +80,7 @@ a {
 }
 
 .has-feedback .form-control {
-    padding-left: 42.5px;
+    padding-left: 42px;
 }
 
 .btn {
@@ -108,5 +109,5 @@ textarea {
 }
 
 pre {
-    height: 372px;
+    height: 310px;
 }

@@ -3,23 +3,41 @@
 @import b3.inline.fieldConstructor
 
 @main(Messages("home.title"), user) {
-    <div class="markdown-container" xmlns="http://www.w3.org/1999/html">
-        <div class="markdown-half">
-            <legend>@Messages("markdown.enter.request")</legend>
-            @helper.form(action = routes.MarkdownController.parseMarkdown()) {
-                @helper.CSRF.formField
-                @b3.textarea(markdownForm("text"), '_hiddenLabel -> "", 'placeholder -> Messages("markdown.example.text"),
-                    'class -> "form-control input-lg", 'rows -> "12", 'value -> textToParse)
-                <div class="form-group">
-                    <div>
-                        <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.parse")</button>
+    @defining(!resultHtml.startsWith("<html>")){ parseFailed =>
+        @if(parseFailed) {
+            <div class="col-md-6 col-md-offset-3 alert alert-danger alert-error">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>@Messages("error")</strong> @resultHtml
+            </div>
+        }
+
+        <div class="markdown-container">
+            <div class="markdown-half">
+                <legend>@Messages("markdown.enter.request")</legend>
+                @helper.form(action = routes.MarkdownController.parseMarkdown()) {
+                    @helper.CSRF.formField
+                    @b3.textarea(markdownForm("text"), '_hiddenLabel -> "", 'placeholder -> Messages("markdown.example.text"),
+                        'class -> "form-control input-lg", 'rows -> "12", 'value -> textToParse)
+                    <div class="form-group">
+                        <div>
+                            <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.parse")</button>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
+
+            <div class="markdown-half">
+                <legend>@Messages("markdown.result")</legend>
+                <pre @if(parseFailed) {style="background-color: #f2dede" }>@resultHtml</pre>
+
+                @if(!parseFailed) {
+                    <div class="form-group">
+                        <div>
+                            <a href="@routes.ApplicationController.markdown()" class="btn btn-lg btn-primary btn-block">@Messages("markdown.save")</a>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-        <div class="markdown-half">
-            <legend>@Messages("markdown.result")</legend>
-            <pre>@resultHtml</pre>
-        </div>
-    </div>
+    }
 }

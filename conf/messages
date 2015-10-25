@@ -3,6 +3,8 @@ invalid.credentials = Invalid credentials!
 access.denied = Access denied!
 user.exists = There already exists a user with this email!
 could.not.authenticate = Could not authenticate with social provider! Please try again!
+unexpected.exception = Something really bad happened under the hood. Please, start to pray and retry.
+input.not.parsable = Input not parsable in line:
 
 home.title = Markdown - Home
 sign.up.title = Markdown - Sign Up
@@ -29,12 +31,12 @@ already.a.member = Already a member?
 not.a.member = Not a member?
 remember.me = Remember my login on this computer
 parse.history = parse history
-#or.use.social = Or use your existing account on one of the following services to sign in:
 
 facebook = Facebook
 
 markdown.enter.request = Please enter the markdown data
 markdown.example.text = "\n# huge header\n### modest header\nplain text\n*a little emphasized text*\n**very strong text**\n[link](http://mysite.com)\n"
 markdown.parse = Parse
+markdown.save = Save
 markdown.result = Result HTML
 markdown.parse.history = Parse history
