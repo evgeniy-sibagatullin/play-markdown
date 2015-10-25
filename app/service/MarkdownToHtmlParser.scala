@@ -14,25 +14,15 @@ object MarkdownToHtmlParser extends RegexParsers {
     val inputDataArray = inputText.trim.split(newline).filter(x => x.nonEmpty && x != "\r")
 
     if (inputDataArray.isEmpty) "Nothing to parse"
-    else getParseResult(inputDataArray)
+    else HtmlElHtml(List(HtmlElBody(inputDataArray.map(parseLine).toList))).toString
   }
 
   def urlTag: Parser[HtmlElement] = "[" ~ plainText ~ "]" ~ "(" ~ urlPat ~ ")" ^^ {
     case "[" ~ text ~ "]" ~ "(" ~ url ~ ")" => HtmlElUrl(text.content, url)
   }
 
-  private def getParseResult(inputDataArray: Array[String]) = {
-    try {
-      HtmlElHtml(List(HtmlElBody(inputDataArray.map(parseLine).toList))).toString
-    }
-    catch {
-      case ex: MarkdownToHtmlParserException => ex.message
-      case _: Throwable => "Something really bad happened under the hood. Please, start to pray and retry."
-    }
-  }
-
   private def parseLine(inputLine: String) = {
-    parseAll(lineTag, inputLine).getOrElse(throw MarkdownToHtmlParserException(s"Input not parsable in line:\n$inputLine"))
+    parseAll(lineTag, inputLine).getOrElse(throw MarkdownToHtmlParserException(inputLine))
   }
 
   private def lineTag: Parser[HtmlElement] = headerLineTag | simpleLineTag

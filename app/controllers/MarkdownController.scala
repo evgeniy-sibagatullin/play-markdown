@@ -11,9 +11,9 @@ import forms.MarkdownForm
 import models.User
 import models.services.UserService
 import play.api.Configuration
-import play.api.i18n.MessagesApi
-import play.api.mvc.Action
+import play.api.i18n.{Messages, MessagesApi}
 import service.MarkdownToHtmlParser
+import service.MarkdownToHtmlParser.MarkdownToHtmlParserException
 
 import scala.concurrent.Future
 import scala.language.postfixOps
@@ -42,7 +42,13 @@ class MarkdownController @Inject()(
       form => Future.successful(BadRequest(views.html.markdown(form, None, "", ""))),
       data => {
         val textToParse = data.text
-        val resultHtml = MarkdownToHtmlParser.parse(textToParse)
+        val resultHtml = try {
+          MarkdownToHtmlParser.parse(textToParse)
+        }
+        catch {
+          case ex: MarkdownToHtmlParserException => Messages("input.not.parsable") + ex.message.mkString(" [", "", "] ")
+          case _: Throwable => Messages("unexpected.exception")
+        }
         Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, textToParse, resultHtml)))
       }
     )
