@@ -11,7 +11,7 @@ GET         /signUp                          controllers.ApplicationController.s
 POST        /signUp                          controllers.SignUpController.signUp
 POST        /authenticate                    controllers.CredentialsAuthController.authenticate
 
-POST        /parseMarkdown                   controllers.MarkdownController.parseMarkdown
+POST        /                                controllers.MarkdownController.parseMarkdown
 GET         /parseMarkdown/:email            controllers.MarkdownController.saveParseOperation(email: String, textToParse: String, resultHtml: String)
 GET         /parseHistory                    controllers.MarkdownController.parseHistory
 GET         /parseHistory/:id                controllers.MarkdownController.deleteParseOperation(id)

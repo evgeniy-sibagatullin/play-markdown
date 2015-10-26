@@ -70,7 +70,7 @@ class MarkdownController @Inject()(
   def saveParseOperation(email: String, textToParse: String, resultHtml: String) = UserAwareAction.async { implicit request =>
     val parseOperationInfo = ParseOperationInfo(UUID.randomUUID().toString, email, textToParse, resultHtml, new DateTime())
     collection.insert(parseOperationInfo)
-    Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, textToParse, resultHtml)))
+      .map{_ => Redirect(routes.MarkdownController.parseHistory)}
   }
 
   /**
