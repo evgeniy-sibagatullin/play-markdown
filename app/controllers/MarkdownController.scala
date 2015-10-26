@@ -9,17 +9,17 @@ import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import com.mohiva.play.silhouette.impl.providers._
 import forms.MarkdownForm
 import models.ParseOperationInfo._
-import models.{ParseOperationInfo, User}
 import models.services.UserService
+import models.{ParseOperationInfo, User}
 import org.joda.time.DateTime
 import play.api.Configuration
 import play.api.i18n._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json._
 import play.api.mvc._
+import play.modules.reactivemongo._
 import play.modules.reactivemongo.json._
 import play.modules.reactivemongo.json.collection._
-import play.modules.reactivemongo._
 import reactivemongo.api.ReadPreference
 import service.MarkdownToHtmlParser
 import service.MarkdownToHtmlParser.MarkdownToHtmlParserException
@@ -46,6 +46,9 @@ class MarkdownController @Inject()(
   val reactiveMongoApi: ReactiveMongoApi)
   extends Silhouette[User, CookieAuthenticator] with Controller with MongoController with ReactiveMongoComponents {
 
+  // get the collection 'parseOperations'
+  val collection = db[JSONCollection]("parseOperations")
+
   def parseMarkdown = UserAwareAction.async { implicit request =>
     MarkdownForm.form.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.markdown(form, None, "", ""))),
@@ -63,9 +66,6 @@ class MarkdownController @Inject()(
     )
   }
 
-  // get the collection 'articles'
-  val collection = db[JSONCollection]("parseOperations")
-
   def saveParseOperation(email: String, textToParse: String, resultHtml: String) = UserAwareAction.async { implicit request =>
     val parseOperationInfo = ParseOperationInfo(email, textToParse, resultHtml, new DateTime())
     collection.insert(parseOperationInfo)
@@ -79,9 +79,11 @@ class MarkdownController @Inject()(
    */
   def parseHistory = SecuredAction.async { implicit request =>
     val user = request.identity
-    val query:JsObject = Json.obj("email" -> user.email)
+    val query: JsObject = Json.obj("email" -> user.email)
     // the cursor of documents
-    val found = collection.find(query).cursor[ParseOperationInfo](ReadPreference.primaryPreferred)
+    val found = collection.find(query).
+      sort(Json.obj("creationDateTime" -> -1)).
+      cursor[ParseOperationInfo](ReadPreference.primaryPreferred)
     // build (asynchronously) a list containing all the articles
     found.collect[List]().map { parseOperations =>
       Ok(views.html.history(user, parseOperations))
