@@ -39,33 +39,37 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
    * Configures the module.
    */
   def configure() {
-    bind[DB].toInstance {
-      import com.typesafe.config.ConfigFactory
-      import reactivemongo.core.nodeset.Authenticate
-      import scala.collection.JavaConversions._
-
-      val config = ConfigFactory.load
-      val user = config.getString("mongodb.user")
-      val password = config.getString("mongodb.password")
-      val dbName = config.getString("mongodb.db")
-      val servers = config.getStringList("mongodb.servers")
-      val credentials = Seq(Authenticate(dbName, user, password))
-
-      val driver = new MongoDriver
-      val connection: MongoConnection = driver.connection(servers, MongoConnectionOptions(), credentials)
-      connection.db(dbName)
-    }
+    /* Explicit */
 //    bind[DB].toInstance {
 //      import com.typesafe.config.ConfigFactory
+//      import reactivemongo.core.nodeset.Authenticate
+//      import scala.collection.JavaConversions._
+//
 //      val config = ConfigFactory.load
+//      val user = config.getString("mongodb.user")
+//      val password = config.getString("mongodb.password")
+//      val dbName = config.getString("mongodb.db")
+//      val servers = config.getStringList("mongodb.servers")
+//      val credentials = Seq(Authenticate(dbName, user, password))
+//
 //      val driver = new MongoDriver
-//      val uri = config.getString("mongodb.uri")
-//      val db = config.getString("mongodb.db")
-//      val connection = MongoConnection.parseURI(uri).map {
-//        parsedUri => driver.connection(parsedUri)
-//      }.get
-//      connection.db(db)
+//      val connection: MongoConnection = driver.connection(servers, MongoConnectionOptions(), credentials)
+//      connection.db(dbName)
 //    }
+
+    /* URI */
+    bind[DB].toInstance {
+      import com.typesafe.config.ConfigFactory
+      val config = ConfigFactory.load
+      val driver = new MongoDriver
+      val uri = config.getString("mongodb.uri")
+      val db = config.getString("mongodb.db")
+      val connection = MongoConnection.parseURI(uri).map {
+        parsedUri => driver.connection(parsedUri)
+      }.get
+      connection.db(db)
+    }
+
     bind[UserService].to[UserServiceImpl]
     bind[UserDAO].to[UserDAOImpl]
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO]
