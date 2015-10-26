@@ -33,7 +33,7 @@
                 @if(!parseFailed && user.isDefined) {
                     <div class="form-group">
                         <div>
-                            <a href="@routes.ApplicationController.markdown()" class="btn btn-lg btn-primary btn-block">@Messages("markdown.save")</a>
+                            <a href="@routes.MarkdownController.saveParseOperation(user.get.email.get, textToParse, resultHtml)" class="btn btn-lg btn-primary btn-block">@Messages("markdown.save")</a>
                         </div>
                     </div>
                 }

@@ -7,11 +7,13 @@ GET         /                                controllers.ApplicationController.m
 GET         /signIn                          controllers.ApplicationController.signIn
 GET         /signOut                         controllers.ApplicationController.signOut
 GET         /signUp                          controllers.ApplicationController.signUp
-GET         /parseHistory                    controllers.ApplicationController.parseHistory
 
-POST        /parseMarkdown                   controllers.MarkdownController.parseMarkdown
 POST        /signUp                          controllers.SignUpController.signUp
 POST        /authenticate                    controllers.CredentialsAuthController.authenticate
+
+POST        /parseMarkdown                   controllers.MarkdownController.parseMarkdown
+GET         /parseMarkdown/:email            controllers.MarkdownController.saveParseOperation(email: String, textToParse: String, resultHtml: String)
+GET         /parseHistory                    controllers.MarkdownController.parseHistory
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                    controllers.Assets.at(path="/public", file)

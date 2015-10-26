@@ -43,15 +43,6 @@ class ApplicationController @Inject() (
   }
 
   /**
-   * Handles the Parse History action.
-   *
-   * @return The result to display.
-   */
-  def parseHistory = SecuredAction.async { implicit request =>
-    Future.successful(Ok(views.html.history(request.identity)))
-  }
-
-  /**
    * Handles the Sign In action.
    *
    * @return The result to display.
