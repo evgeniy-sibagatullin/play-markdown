@@ -12,6 +12,7 @@
                     @parseOperation.textToParse <br/>
                     @parseOperation.resultHtml <br/>
                     created on : @org.joda.time.format.DateTimeFormat.forPattern("MMM d, yyyy HH:mm:ss").print(parseOperation.creationDateTime)
+                    <a href="@routes.MarkdownController.deleteParseOperation(parseOperation.id)" class="delete">delete</a>
                     <hr>
                 </li>
             }

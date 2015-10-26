@@ -1,5 +1,6 @@
 package controllers
 
+import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api._
@@ -67,7 +68,7 @@ class MarkdownController @Inject()(
   }
 
   def saveParseOperation(email: String, textToParse: String, resultHtml: String) = UserAwareAction.async { implicit request =>
-    val parseOperationInfo = ParseOperationInfo(email, textToParse, resultHtml, new DateTime())
+    val parseOperationInfo = ParseOperationInfo(UUID.randomUUID().toString, email, textToParse, resultHtml, new DateTime())
     collection.insert(parseOperationInfo)
     Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, textToParse, resultHtml)))
   }
@@ -92,5 +93,10 @@ class MarkdownController @Inject()(
         e.printStackTrace()
         BadRequest(e.getMessage)
     }
+  }
+
+  def deleteParseOperation(id: String) = SecuredAction.async { implicit request =>
+    collection.remove(Json.obj("id" -> id))
+      .map{_ => Redirect(routes.MarkdownController.parseHistory)}
   }
 }

@@ -4,13 +4,14 @@ import org.joda.time.DateTime
 
 /**
  * The user object.
- *
+ * @param id The unique ID of the parse operation.
  * @param email The client email.
  * @param textToParse Markdown input text.
  * @param resultHtml Successfully generated HTML.
  * @param creationDateTime Surprisingly creation date and time.
  */
 case class ParseOperationInfo (
+  id: String,
   email: String,
   textToParse: String,
   resultHtml: String,

@@ -14,6 +14,7 @@ POST        /authenticate                    controllers.CredentialsAuthControll
 POST        /parseMarkdown                   controllers.MarkdownController.parseMarkdown
 GET         /parseMarkdown/:email            controllers.MarkdownController.saveParseOperation(email: String, textToParse: String, resultHtml: String)
 GET         /parseHistory                    controllers.MarkdownController.parseHistory
+GET         /parseHistory/:id                controllers.MarkdownController.deleteParseOperation(id)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                    controllers.Assets.at(path="/public", file)
