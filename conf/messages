@@ -39,4 +39,5 @@ markdown.example.text = "\n# huge header\n### modest header\nplain text\n*a litt
 markdown.parse = Parse
 markdown.save = Save
 markdown.result = Result HTML
+markdown.preview = Preview
 markdown.parse.history = Parse history

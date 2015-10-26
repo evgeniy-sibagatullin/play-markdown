@@ -12,7 +12,7 @@
         }
 
         <div class="markdown-container">
-            <div class="markdown-half">
+            <div class="markdown-input">
                 <legend>@Messages("markdown.enter.request")</legend>
                 @helper.form(action = routes.MarkdownController.parseMarkdown()) {
                     @helper.CSRF.formField
@@ -26,10 +26,9 @@
                 }
             </div>
 
-            <div class="markdown-half">
+            <div class="markdown-result">
                 <legend>@Messages("markdown.result")</legend>
-                <pre @if(parseFailed) {style="background-color: #f2dede" }>@resultHtml</pre>
-
+                <pre @if(parseFailed) { style="background-color: #f2dede" }>@resultHtml</pre>
                 @if(!parseFailed && user.isDefined) {
                     <div class="form-group">
                         <div>
@@ -38,6 +37,14 @@
                     </div>
                 }
             </div>
+            @if(!parseFailed) {
+                <div class="markdown-preview">
+                    <legend>@Messages("markdown.preview")</legend>
+                    <div>
+                        @Html(resultHtml)
+                    </div>
+                </div>
+            }
         </div>
     }
 }
