@@ -6,7 +6,7 @@ object MarkdownToHtmlParser extends RegexParsers {
   val newline = "\n"
   val plainTextPat = "[^#*\\[\\]]+".r
   val headerPat = "#{1,3}".r
-  val italicPat = "\\*".r
+  val emphasizedPat = "\\*".r
   val strongPat = "\\*{2}".r
   val urlPat = "(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?".r
 
@@ -15,10 +15,6 @@ object MarkdownToHtmlParser extends RegexParsers {
 
     if (inputDataArray.isEmpty) "Nothing to parse"
     else HtmlElHtml(List(HtmlElBody(inputDataArray.map(parseLine).toList))).toString
-  }
-
-  def urlTag: Parser[HtmlElement] = "[" ~ plainText ~ "]" ~ "(" ~ urlPat ~ ")" ^^ {
-    case "[" ~ text ~ "]" ~ "(" ~ url ~ ")" => HtmlElUrl(text.content, url)
   }
 
   private def parseLine(inputLine: String) = {
@@ -36,7 +32,7 @@ object MarkdownToHtmlParser extends RegexParsers {
     case text ~ list => HtmlElParagraph(text :: list.head.contentElements)
   }
 
-  private def emphasizedTag: Parser[HtmlElement] = italicPat ~> plainText <~ italicPat ^^ {
+  private def emphasizedTag: Parser[HtmlElement] = emphasizedPat ~> plainText <~ emphasizedPat ^^ {
     case text => HtmlElEmphasized(text.content)
   }
 
@@ -44,7 +40,13 @@ object MarkdownToHtmlParser extends RegexParsers {
     case text => HtmlElStrong(text.content)
   }
 
-  private def plainText: Parser[HtmlElement] = plainTextPat ^^ { case t => HtmlElPlainText(t.trim.replaceAll("\\s+", " ")) }
+  def urlTag: Parser[HtmlElement] = "[" ~ plainText ~ "]" ~ "(" ~ urlPat ~ ")" ^^ {
+    case "[" ~ text ~ "]" ~ "(" ~ url ~ ")" => HtmlElUrl(text.content, url)
+  }
+
+  private def plainText: Parser[HtmlElement] = plainTextPat ^^ {
+    case t => HtmlElPlainText(t.trim.replaceAll("\\s+", " "))
+  }
 
   case class MarkdownToHtmlParserException(message: String) extends RuntimeException(message)
 
