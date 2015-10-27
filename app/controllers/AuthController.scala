@@ -31,12 +31,13 @@ import scala.language.postfixOps
  *
  * @param messagesApi The Play messages API.
  * @param env The Silhouette environment.
+ * @param socialProviderRegistry The social provider registry.
  * @param userService The user service implementation.
  * @param authInfoRepository The auth info repository implementation.
  * @param credentialsProvider The credentials provider.
- * @param socialProviderRegistry The social provider registry.
  * @param configuration The Play configuration.
  * @param clock The clock instance.
+ * @param passwordHasher The password hasher implementation.
  */
 class AuthController @Inject() (
   val messagesApi: MessagesApi,
@@ -47,7 +48,6 @@ class AuthController @Inject() (
   credentialsProvider: CredentialsProvider,
   configuration: Configuration,
   clock: Clock,
-  avatarService: AvatarService,
   passwordHasher: PasswordHasher)
   extends Silhouette[User, CookieAuthenticator] {
 
@@ -150,8 +150,7 @@ class AuthController @Inject() (
               avatarURL = None
             )
             for {
-              avatar <- avatarService.retrieveURL(data.email)
-              user <- userService.save(user.copy(avatarURL = avatar))
+              user <- userService.save(user.copy())
               authInfo <- authInfoRepository.add(loginInfo, authInfo)
               authenticator <- env.authenticatorService.create(loginInfo)
               value <- env.authenticatorService.init(authenticator)
