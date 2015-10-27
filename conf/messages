@@ -1,43 +1,48 @@
-error.email = Valid email required
-invalid.credentials = Invalid credentials!
-access.denied = Access denied!
-user.exists = There already exists a user with this email!
-could.not.authenticate = Could not authenticate with social provider! Please try again!
-unexpected.exception = Something really bad happened under the hood. Please, start to pray and retry.
-input.not.parsable = Input not parsable in line:
+#titles
+title.home = Markdown - Home
+title.sign.up = Markdown - Sign Up
+title.sign.in = Markdown - Sign In
+title.parse.history = Markdown - Parse history
 
-home.title = Markdown - Home
-sign.up.title = Markdown - Sign Up
-sign.in.title = Markdown - Sign In
-
+# main
 toggle.navigation = Toggle navigation
-welcome.signed.in = After adding the Mongo DB here will be displayed the history of user parse operations.
-
-sign.up.account = Sign up for a new account
-sign.in.credentials = Sign in with your credentials
-
-error = Error!
-first.name = First name
-last.name = Last name
-full.name = Full name
-email = Email
-password = Password
-sign.up = Sign up
-sign.in = Sign in
-sign.out = Sign out
-sign.in.now = Sign in now
-sign.up.now = Sign up now
-already.a.member = Already a member?
-not.a.member = Not a member?
-remember.me = Remember my login on this computer
 parse.history = parse history
+sign.out = Sign out
 
-facebook = Facebook
-
-markdown.enter.request = Please enter the markdown data
-markdown.example.text = "\n# huge header\n### modest header\nplain text\n*a little emphasized text*\n**very strong text**\n[link](http://mysite.com)\n"
+# markdown
+markdown.enter.data = Please enter the markdown data
+markdown.example.text = \n# huge header\n### modest header\nplain text\n*a little emphasized text*\n**very strong text**\n[link](http://mysite.com)\n
 markdown.parse = Parse
 markdown.save = Save
 markdown.result = Result HTML
 markdown.preview = Preview
-markdown.parse.history = Parse history
+
+# sign up
+sign.up = Sign up
+sign.up.account = Sign up for a new account
+sign.up.already.a.member = Already a member?
+sign.up.sign.in.now = Sign in now
+first.name = First name
+last.name = Last name
+email = Email
+password = Password
+
+# sign in
+sign.in = Sign in
+sign.in.credentials = Sign in with your credentials
+sign.in.not.a.member = Not a member?
+sign.in.sign.up.now = Sign up now
+sign.in.remember.me = Remember my login on this computer
+
+# social
+facebook = Facebook
+
+# errors
+error = Error!
+error.db = Unexpected database error
+error.invalid.email = Valid email required
+error.invalid.credentials = Invalid credentials!
+error.user.exists = There already exists a user with this email!
+could.not.authenticate = Could not authenticate with social provider! Please try again!
+error.unexpected.exception = Something really bad happened under the hood. Please, start to pray and retry.
+error.input.not.parsable = Input not parsable in line:

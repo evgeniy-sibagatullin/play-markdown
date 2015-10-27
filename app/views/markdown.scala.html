@@ -2,7 +2,7 @@
 
 @import b3.inline.fieldConstructor
 
-@main(Messages("home.title"), user) {
+@main(Messages("title.home"), user) {
     @defining(!resultHtml.startsWith("<html>")){ parseFailed =>
         @if(parseFailed) {
             <div class="col-md-6 col-md-offset-3 alert alert-danger alert-error">
@@ -13,7 +13,7 @@
 
         <div class="markdown-container">
             <div class="markdown-input">
-                <legend>@Messages("markdown.enter.request")</legend>
+                <legend>@Messages("markdown.enter.data")</legend>
                 @helper.form(action = routes.MarkdownController.parseMarkdown()) {
                     @helper.CSRF.formField
                     @b3.textarea(markdownForm("text"), '_hiddenLabel -> "", 'placeholder -> Messages("markdown.example.text"),

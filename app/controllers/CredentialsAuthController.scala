@@ -79,7 +79,7 @@ class CredentialsAuthController @Inject() (
           }
         }.recover {
           case e: ProviderException =>
-            Redirect(routes.ApplicationController.signIn()).flashing("error" -> Messages("invalid.credentials"))
+            Redirect(routes.ApplicationController.signIn()).flashing("error" -> Messages("error.invalid.credentials"))
         }
       }
     )

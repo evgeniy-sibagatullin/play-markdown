@@ -1,6 +1,6 @@
-@(user: models.User, parseOperations: List[models.ParseOperationInfo])(implicit messages: Messages)
+@(user: models.User, parseOperations: List[models.ParseOperation])(implicit messages: Messages)
 
-@main(Messages("markdown.parse.history"), Some(user)) {
+@main(Messages("title.parse.history"), Some(user)) {
     <div class="user col-md-6 col-md-offset-3">
         <hr>
         @if(parseOperations.isEmpty) {
