@@ -27,7 +27,7 @@ import scala.language.postfixOps
 
 
 /**
- * The basic application controller.
+ * The Auth operations controller.
  *
  * @param messagesApi The Play messages API.
  * @param env The Silhouette environment.
@@ -53,8 +53,6 @@ class AuthController @Inject() (
 
   /**
    * Handles the Sign In action.
-   *
-   * @return The result to display.
    */
   def signIn = UserAwareAction.async { implicit request =>
     request.identity match {
@@ -65,8 +63,6 @@ class AuthController @Inject() (
 
   /**
    * Handles the Sign Out action.
-   *
-   * @return The result to display.
    */
   def signOut = SecuredAction.async { implicit request =>
     val result = Redirect(routes.MarkdownController.index())
@@ -76,8 +72,6 @@ class AuthController @Inject() (
 
   /**
     * Handles the Sign Up action.
-   *
-   * @return The result to display.
    */
   def signUp = UserAwareAction.async { implicit request =>
     request.identity match {
@@ -88,8 +82,6 @@ class AuthController @Inject() (
 
   /**
    * Authenticates a user against the credentials provider.
-   *
-   * @return The result to display.
    */
   def authenticate = Action.async { implicit request =>
     SignInForm.form.bindFromRequest.fold(
@@ -127,8 +119,6 @@ class AuthController @Inject() (
 
   /**
    * Registers a new user.
-   *
-   * @return The result to display.
    */
   def signUpPost = Action.async { implicit request =>
     SignUpForm.form.bindFromRequest.fold(

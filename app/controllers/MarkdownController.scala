@@ -22,7 +22,7 @@ import service.MarkdownToHtmlParser.MarkdownToHtmlParserException
 import scala.concurrent.Future
 
 /**
- * The markdown parse controller.
+ * The Markdown operations controller.
  *
  * @param messagesApi The Play messages API.
  * @param env The Silhouette environment.
@@ -37,9 +37,7 @@ class MarkdownController @Inject()(
   val collection = db[JSONCollection]("parseOperations")
 
   /**
-   * Handles the "Markdown Home" action.
-   *
-   * @return The result to display.
+   * Handles the default Home action.
    */
   def index = UserAwareAction.async { implicit request =>
     val exampleText = Messages("markdown.example.text")
@@ -47,9 +45,7 @@ class MarkdownController @Inject()(
   }
 
   /**
-   * Handles the "Markdown Parse" action.
-   *
-   * @return The result to display.
+   * Performs a call to parser and returns the result to the page.
    */
   def parseMarkdown = UserAwareAction.async { implicit request =>
     MarkdownForm.form.bindFromRequest.fold(
@@ -69,9 +65,7 @@ class MarkdownController @Inject()(
   }
 
   /**
-   * Handles the "Markdown Save" action.
-   *
-   * @return The result to display.
+   * Saves parse operation and redirects to parse history page
    */
   def saveParseOperation(email: String, textToParse: String, resultHtml: String) = UserAwareAction.async { implicit request =>
     val parseOperationInfo = ParseOperation(UUID.randomUUID().toString, email, textToParse, resultHtml, new DateTime())
@@ -80,9 +74,7 @@ class MarkdownController @Inject()(
   }
 
   /**
-   * Handles the "Parse History" action.
-   *
-   * @return The result to display.
+   * Handles the Parse History action.
    */
   def parseHistory = SecuredAction.async { implicit request =>
     val user = request.identity
@@ -95,9 +87,7 @@ class MarkdownController @Inject()(
   }
 
   /**
-   * Handles the "Parse History Delete" action.
-   *
-   * @return The result to display.
+   * Deletes the selected parse operation on parse history page.
    */
   def deleteParseOperation(id: String) = SecuredAction.async { implicit request =>
     collection.remove(Json.obj("id" -> id)).
