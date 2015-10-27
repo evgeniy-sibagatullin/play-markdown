@@ -6,26 +6,26 @@
     <div class="markdown-container">
         <hr>
         @if(parseOperations.isEmpty) {
-            <h4 class="history-text">No parse operations saved yet.</h4>
+            <h4 class="history-text">@Messages("history.no.parse.operations")</h4>
         } else {
             <ul>
-            @parseOperations.map { parseOperation =>
+                @parseOperations.map { parseOperation =>
                 <li>
-                    <span class="history-text">Created on : <b>@org.joda.time.format.DateTimeFormat.forPattern("MMM d, yyyy HH:mm:ss").print(parseOperation.creationDateTime)</b></span>
+                    <span class="history-text">@Messages("history.created.on") <b>@org.joda.time.format.DateTimeFormat.forPattern("MMM d, yyyy HH:mm:ss").print(parseOperation.creationDateTime)</b></span>
                     <br/>
                     <div class="markdown-input history-input">
                         @helper.form(action = routes.MarkdownController.parseMarkdown()) {
                             @helper.CSRF.formField
                             @b3.textarea(markdownForm("text"), 'placeholder -> Messages("markdown.example.text"),
                                 'class -> "form-control input-lg disabled", 'rows -> "12", 'value -> parseOperation.textToParse)
-                            <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.edit.copy")</button>
+                            <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("history.edit.copy")</button>
                         }
                     </div>
                     <div class="markdown-result history-result">
                         <div class="markdown-preview-content">
                             @Html(parseOperation.resultHtml)
                         </div>
-                        <a href="@routes.MarkdownController.deleteParseOperation(parseOperation.id)" class="btn btn-lg btn-danger btn-block">@Messages("markdown.delete")</a>
+                        <a href="@routes.MarkdownController.deleteParseOperation(parseOperation.id)" class="btn btn-lg btn-danger btn-block">@Messages("history.delete")</a>
                     </div>
                     <hr>
                 </li>

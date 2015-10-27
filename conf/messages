@@ -9,16 +9,6 @@ toggle.navigation = Toggle navigation
 parse.history = parse history
 sign.out = Sign out
 
-# markdown
-markdown.enter.data = Please enter the markdown data
-markdown.example.text = \n# huge header\n### modest header\nplain text\n*a little emphasized text*\n**very strong text**\n[link](http://mysite.com)\n
-markdown.parse = Parse
-markdown.save = Save
-markdown.result = Result HTML
-markdown.preview = Preview
-markdown.delete = Delete
-markdown.edit.copy = Edit copy
-
 # sign up
 sign.up = Sign up
 sign.up.account = Sign up for a new account
@@ -35,6 +25,20 @@ sign.in.credentials = Sign in with your credentials
 sign.in.not.a.member = Not a member?
 sign.in.sign.up.now = Sign up now
 sign.in.remember.me = Remember my login on this computer
+
+# markdown
+markdown.enter.data = Please enter the markdown data
+markdown.example.text = \n# huge header\n### modest header\nplain text\n*a little emphasized text*\n**very strong text**\n[link](http://mysite.com)\n
+markdown.parse = Parse
+markdown.save = Save
+markdown.result = Result HTML
+markdown.preview = Preview
+
+# history
+history.no.parse.operations = No parse operations saved yet.
+history.created.on = Created on:
+history.edit.copy = Edit copy
+history.delete = Delete
 
 # errors
 error = Error!
