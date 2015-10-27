@@ -32,10 +32,10 @@
                     <ul class="nav navbar-nav navbar-right">
                     @user.map { u =>
                     <li><a href="@routes.MarkdownController.parseHistory">@u.fullName @Messages("parse.history")</a></li>
-                    <li><a href="@routes.ApplicationController.signOut">@Messages("sign.out")</a></li>
+                    <li><a href="@routes.AuthController.signOut">@Messages("sign.out")</a></li>
                     }.getOrElse {
-                        <li><a href="@routes.ApplicationController.signIn">@Messages("sign.in")</a></li>
-                        <li><a href="@routes.ApplicationController.signUp">@Messages("sign.up")</a></li>
+                        <li><a href="@routes.AuthController.signIn">@Messages("sign.in")</a></li>
+                        <li><a href="@routes.AuthController.signUp">@Messages("sign.up")</a></li>
                     }
                     </ul>
                 </nav>

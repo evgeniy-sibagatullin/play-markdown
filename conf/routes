@@ -3,11 +3,11 @@
 # ~~~~
 
 # Home page
-GET         /signIn                          controllers.ApplicationController.signIn
-GET         /signOut                         controllers.ApplicationController.signOut
-GET         /signUp                          controllers.ApplicationController.signUp
-POST        /signUp                          controllers.SignUpController.signUp
-POST        /authenticate                    controllers.CredentialsAuthController.authenticate
+GET         /signIn                          controllers.AuthController.signIn
+GET         /signOut                         controllers.AuthController.signOut
+GET         /signUp                          controllers.AuthController.signUp
+POST        /authenticate                    controllers.AuthController.authenticate
+POST        /signUp                          controllers.AuthController.signUpPost
 
 GET         /                                controllers.MarkdownController.index
 POST        /                                controllers.MarkdownController.parseMarkdown
