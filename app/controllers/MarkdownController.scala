@@ -50,6 +50,23 @@ class MarkdownController @Inject()(
   // get the collection 'parseOperations'
   val collection = db[JSONCollection]("parseOperations")
 
+  val exampleTemplate = "" +
+    "# huge header\n" +
+    "### modest header\n" +
+    "plain text\n" +
+    "*a little emphasized text*\n" +
+    "**very strong text**\n" +
+    "[link](http://mysite.com)"
+
+  /**
+   * Handles the "Home" action.
+   *
+   * @return The result to display.
+   */
+  def index = UserAwareAction.async { implicit request =>
+    Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, exampleTemplate, MarkdownToHtmlParser.parse(exampleTemplate))))
+  }
+
   def parseMarkdown = UserAwareAction.async { implicit request =>
     MarkdownForm.form.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.markdown(form, None, "", ""))),

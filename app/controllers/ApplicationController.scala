@@ -25,23 +25,6 @@ class ApplicationController @Inject() (
   socialProviderRegistry: SocialProviderRegistry)
   extends Silhouette[User, CookieAuthenticator] {
 
-  val exampleTemplate = "" +
-    "# huge header\n" +
-    "### modest header\n" +
-    "plain text\n" +
-    "*a little emphasized text*\n" +
-    "**very strong text**\n" +
-    "[link](http://mysite.com)"
-
-  /**
-   * Handles the Markdown action.
-   *
-   * @return The result to display.
-   */
-  def markdown = UserAwareAction.async { implicit request =>
-    Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, exampleTemplate, MarkdownToHtmlParser.parse(exampleTemplate))))
-  }
-
   /**
    * Handles the Sign In action.
    *
@@ -49,7 +32,7 @@ class ApplicationController @Inject() (
    */
   def signIn = UserAwareAction.async { implicit request =>
     request.identity match {
-      case Some(user) => Future.successful(Redirect(routes.ApplicationController.markdown()))
+      case Some(user) => Future.successful(Redirect(routes.MarkdownController.index()))
       case None => Future.successful(Ok(views.html.signIn(SignInForm.form, socialProviderRegistry)))
     }
   }
@@ -61,7 +44,7 @@ class ApplicationController @Inject() (
    */
   def signUp = UserAwareAction.async { implicit request =>
     request.identity match {
-      case Some(user) => Future.successful(Redirect(routes.ApplicationController.markdown()))
+      case Some(user) => Future.successful(Redirect(routes.MarkdownController.index()))
       case None => Future.successful(Ok(views.html.signUp(SignUpForm.form)))
     }
   }
@@ -72,7 +55,7 @@ class ApplicationController @Inject() (
    * @return The result to display.
    */
   def signOut = SecuredAction.async { implicit request =>
-    val result = Redirect(routes.ApplicationController.markdown())
+    val result = Redirect(routes.MarkdownController.index())
     env.eventBus.publish(LogoutEvent(request.identity, request, request2Messages))
     env.authenticatorService.discard(request.authenticator, result)
   }

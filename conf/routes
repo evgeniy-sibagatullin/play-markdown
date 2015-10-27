@@ -3,18 +3,17 @@
 # ~~~~
 
 # Home page
-GET         /                                controllers.ApplicationController.markdown
 GET         /signIn                          controllers.ApplicationController.signIn
 GET         /signOut                         controllers.ApplicationController.signOut
 GET         /signUp                          controllers.ApplicationController.signUp
-
 POST        /signUp                          controllers.SignUpController.signUp
 POST        /authenticate                    controllers.CredentialsAuthController.authenticate
 
+GET         /                                controllers.MarkdownController.index
 POST        /                                controllers.MarkdownController.parseMarkdown
-GET         /parseMarkdown/:email            controllers.MarkdownController.saveParseOperation(email: String, textToParse: String, resultHtml: String)
+GET         /save/:email                     controllers.MarkdownController.saveParseOperation(email: String, textToParse: String, resultHtml: String)
 GET         /parseHistory                    controllers.MarkdownController.parseHistory
-GET         /parseHistory/:id                controllers.MarkdownController.deleteParseOperation(id)
+GET         /parseHistory/delete/:id         controllers.MarkdownController.deleteParseOperation(id)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                    controllers.Assets.at(path="/public", file)

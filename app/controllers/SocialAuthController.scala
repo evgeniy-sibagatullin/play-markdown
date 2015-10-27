@@ -49,7 +49,7 @@ class SocialAuthController @Inject() (
             authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
             authenticator <- env.authenticatorService.create(profile.loginInfo)
             value <- env.authenticatorService.init(authenticator)
-            result <- env.authenticatorService.embed(value, Redirect(routes.ApplicationController.markdown()))
+            result <- env.authenticatorService.embed(value, Redirect(routes.MarkdownController.index()))
           } yield {
             env.eventBus.publish(LoginEvent(user, request, request2Messages))
             result
