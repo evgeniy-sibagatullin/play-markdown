@@ -7,7 +7,6 @@ import com.mohiva.play.silhouette.api.Authenticator.Implicits._
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.{Clock, Credentials, PasswordHasher}
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
@@ -136,8 +135,7 @@ class AuthController @Inject() (
               firstName = Some(data.firstName),
               lastName = Some(data.lastName),
               fullName = Some(data.firstName + " " + data.lastName),
-              email = Some(data.email),
-              avatarURL = None
+              email = Some(data.email)
             )
             for {
               user <- userService.save(user.copy())
