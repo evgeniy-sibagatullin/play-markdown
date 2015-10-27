@@ -16,7 +16,7 @@
                 <legend>@Messages("markdown.enter.data")</legend>
                 @helper.form(action = routes.MarkdownController.parseMarkdown()) {
                     @helper.CSRF.formField
-                    @b3.textarea(markdownForm("text"), '_hiddenLabel -> "", 'placeholder -> Messages("markdown.example.text"),
+                    @b3.textarea(markdownForm("text"), 'placeholder -> Messages("markdown.example.text"),
                         'class -> "form-control input-lg", 'rows -> "12", 'value -> textToParse)
                     <div class="form-group">
                         <div>
@@ -32,11 +32,13 @@
                 @if(!parseFailed && user.isDefined) {
                     <div class="form-group">
                         <div>
-                            <a href="@routes.MarkdownController.saveParseOperation(user.get.email.get, textToParse, resultHtml)" class="btn btn-lg btn-primary btn-block">@Messages("markdown.save")</a>
+                            <a href="@routes.MarkdownController.saveParseOperation(user.get.email.get, textToParse, resultHtml)"
+                            class="btn btn-lg btn-primary btn-block">@Messages("markdown.save")</a>
                         </div>
                     </div>
                 }
             </div>
+
             @if(!parseFailed) {
                 <div class="markdown-preview">
                     <legend>@Messages("markdown.preview")</legend>

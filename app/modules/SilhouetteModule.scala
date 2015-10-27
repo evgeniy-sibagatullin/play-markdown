@@ -28,7 +28,7 @@ import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.openid.OpenIdClient
 import play.api.libs.ws.WSClient
-import reactivemongo.api.{MongoConnectionOptions, DB, MongoConnection, MongoDriver}
+import reactivemongo.api.{DB, MongoConnection, MongoDriver}
 
 /**
  * The Guice module which wires all Silhouette dependencies.
