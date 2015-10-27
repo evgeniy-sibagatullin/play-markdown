@@ -18,18 +18,14 @@
                     @helper.CSRF.formField
                     @b3.textarea(markdownForm("text"), 'placeholder -> Messages("markdown.example.text"),
                         'class -> "form-control input-lg", 'rows -> "12", 'value -> textToParse)
-                    <div class="form-group">
-                        <div>
-                            <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.parse")</button>
-                        </div>
-                    </div>
+                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.parse")</button>
                 }
             </div>
 
             <div class="markdown-result">
                 <legend>@Messages("markdown.result")</legend>
                 <pre @if(parseFailed) { style="background-color: #f2dede" }>@resultHtml</pre>
-                @if(!parseFailed && user.isDefined) {
+                @if(!parseFailed && user.isDefined && !textToParse.equals(Messages("markdown.example.text"))) {
                     <div class="form-group">
                         <div>
                             <a href="@routes.MarkdownController.saveParseOperation(user.get.email.get, textToParse, resultHtml)"
@@ -40,9 +36,9 @@
             </div>
 
             @if(!parseFailed) {
-                <div class="markdown-preview">
+                <div class="markdown-preview-block">
                     <legend>@Messages("markdown.preview")</legend>
-                    <div>
+                    <div class="markdown-preview-content">
                         @Html(resultHtml)
                     </div>
                 </div>

@@ -82,7 +82,7 @@ class MarkdownController @Inject()(
     val found = collection.find(query).
       sort(Json.obj("creationDateTime" -> -1)).
       cursor[ParseOperation](ReadPreference.primaryPreferred)
-    found.collect[List]().map { parseOperations => Ok(views.html.history(user, parseOperations)) }.
+    found.collect[List]().map { parseOperations => Ok(views.html.history(MarkdownForm.form, user, parseOperations)) }.
       recover { case e => logger.error(Messages("error.db"), e); BadRequest(e.getMessage) }
   }
 

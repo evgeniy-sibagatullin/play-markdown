@@ -1,18 +1,32 @@
-@(user: models.User, parseOperations: List[models.ParseOperation])(implicit messages: Messages)
+@(markdownForm: Form[forms.MarkdownForm.Data], user: models.User, parseOperations: List[models.ParseOperation])(implicit request: RequestHeader, messages: Messages)
+
+@import b3.inline.fieldConstructor
 
 @main(Messages("title.parse.history"), Some(user)) {
-    <div class="user col-md-6 col-md-offset-3">
+    <div class="markdown-container">
         <hr>
         @if(parseOperations.isEmpty) {
-            <p>No parse operations saved yet.</p>
+            <h4 class="history-text">No parse operations saved yet.</h4>
         } else {
             <ul>
             @parseOperations.map { parseOperation =>
                 <li>
-                    @parseOperation.textToParse <br/>
-                    @parseOperation.resultHtml <br/>
-                    created on : @org.joda.time.format.DateTimeFormat.forPattern("MMM d, yyyy HH:mm:ss").print(parseOperation.creationDateTime)
-                    <a href="@routes.MarkdownController.deleteParseOperation(parseOperation.id)" class="delete">delete</a>
+                    <span class="history-text">Created on : <b>@org.joda.time.format.DateTimeFormat.forPattern("MMM d, yyyy HH:mm:ss").print(parseOperation.creationDateTime)</b></span>
+                    <br/>
+                    <div class="markdown-input history-input">
+                        @helper.form(action = routes.MarkdownController.parseMarkdown()) {
+                            @helper.CSRF.formField
+                            @b3.textarea(markdownForm("text"), 'placeholder -> Messages("markdown.example.text"),
+                                'class -> "form-control input-lg disabled", 'rows -> "12", 'value -> parseOperation.textToParse)
+                            <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("markdown.edit.copy")</button>
+                        }
+                    </div>
+                    <div class="markdown-result history-result">
+                        <div class="markdown-preview-content">
+                            @Html(parseOperation.resultHtml)
+                        </div>
+                        <a href="@routes.MarkdownController.deleteParseOperation(parseOperation.id)" class="btn btn-lg btn-danger btn-block">@Messages("markdown.delete")</a>
+                    </div>
                     <hr>
                 </li>
             }

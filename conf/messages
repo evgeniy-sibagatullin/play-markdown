@@ -16,6 +16,8 @@ markdown.parse = Parse
 markdown.save = Save
 markdown.result = Result HTML
 markdown.preview = Preview
+markdown.delete = Delete
+markdown.edit.copy = Edit copy
 
 # sign up
 sign.up = Sign up
@@ -34,15 +36,11 @@ sign.in.not.a.member = Not a member?
 sign.in.sign.up.now = Sign up now
 sign.in.remember.me = Remember my login on this computer
 
-# social
-facebook = Facebook
-
 # errors
 error = Error!
 error.db = Unexpected database error
 error.invalid.email = Valid email required
 error.invalid.credentials = Invalid credentials!
 error.user.exists = There already exists a user with this email!
-could.not.authenticate = Could not authenticate with social provider! Please try again!
 error.unexpected.exception = Something really bad happened under the hood. Please, start to pray and retry.
 error.input.not.parsable = Input not parsable in line:
