@@ -4,16 +4,10 @@ import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.authenticators.CookieAuthenticator
-import com.mohiva.play.silhouette.impl.providers._
 import forms.MarkdownForm
-import models.ParseOperationInfo._
-import models.services.UserService
-import models.{ParseOperationInfo, User}
+import models.{ParseOperation, User}
 import org.joda.time.DateTime
-import play.api.Configuration
 import play.api.i18n._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json._
@@ -32,41 +26,31 @@ import scala.concurrent.Future
  *
  * @param messagesApi The Play messages API.
  * @param env The Silhouette environment.
- * @param userService The user service implementation.
- * @param authInfoRepository The auth info repository implementation.
+ * @param reactiveMongoApi The ReactiveMongo API
  */
 class MarkdownController @Inject()(
   val messagesApi: MessagesApi,
   val env: Environment[User, CookieAuthenticator],
-  userService: UserService,
-  authInfoRepository: AuthInfoRepository,
-  credentialsProvider: CredentialsProvider,
-  socialProviderRegistry: SocialProviderRegistry,
-  configuration: Configuration,
-  clock: Clock,
   val reactiveMongoApi: ReactiveMongoApi)
   extends Silhouette[User, CookieAuthenticator] with Controller with MongoController with ReactiveMongoComponents {
 
-  // get the collection 'parseOperations'
   val collection = db[JSONCollection]("parseOperations")
 
-  val exampleTemplate = "" +
-    "# huge header\n" +
-    "### modest header\n" +
-    "plain text\n" +
-    "*a little emphasized text*\n" +
-    "**very strong text**\n" +
-    "[link](http://mysite.com)"
-
   /**
-   * Handles the "Home" action.
+   * Handles the "Markdown Home" action.
    *
    * @return The result to display.
    */
   def index = UserAwareAction.async { implicit request =>
-    Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, exampleTemplate, MarkdownToHtmlParser.parse(exampleTemplate))))
+    val exampleText = Messages("markdown.example.text")
+    Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, exampleText, MarkdownToHtmlParser.parse(exampleText))))
   }
 
+  /**
+   * Handles the "Markdown Parse" action.
+   *
+   * @return The result to display.
+   */
   def parseMarkdown = UserAwareAction.async { implicit request =>
     MarkdownForm.form.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.markdown(form, None, "", ""))),
@@ -76,44 +60,48 @@ class MarkdownController @Inject()(
           MarkdownToHtmlParser.parse(textToParse)
         }
         catch {
-          case ex: MarkdownToHtmlParserException => Messages("input.not.parsable") + ex.message.mkString(" [", "", "] ")
-          case _: Throwable => Messages("unexpected.exception")
+          case ex: MarkdownToHtmlParserException => Messages("error.input.not.parsable") + ex.message.mkString(" [", "", "] ")
+          case _: Throwable => Messages("error.unexpected.exception")
         }
         Future.successful(Ok(views.html.markdown(MarkdownForm.form, request.identity, textToParse, resultHtml)))
       }
     )
   }
 
+  /**
+   * Handles the "Markdown Save" action.
+   *
+   * @return The result to display.
+   */
   def saveParseOperation(email: String, textToParse: String, resultHtml: String) = UserAwareAction.async { implicit request =>
-    val parseOperationInfo = ParseOperationInfo(UUID.randomUUID().toString, email, textToParse, resultHtml, new DateTime())
-    collection.insert(parseOperationInfo)
-      .map{_ => Redirect(routes.MarkdownController.parseHistory)}
+    val parseOperationInfo = ParseOperation(UUID.randomUUID().toString, email, textToParse, resultHtml, new DateTime())
+    collection.insert(parseOperationInfo).map { _ => Redirect(routes.MarkdownController.parseHistory) }.
+      recover { case e => logger.error(Messages("error.db"), e); BadRequest(e.getMessage) }
   }
 
   /**
-   * Handles the Parse History action.
+   * Handles the "Parse History" action.
    *
    * @return The result to display.
    */
   def parseHistory = SecuredAction.async { implicit request =>
     val user = request.identity
     val query: JsObject = Json.obj("email" -> user.email)
-    // the cursor of documents
     val found = collection.find(query).
       sort(Json.obj("creationDateTime" -> -1)).
-      cursor[ParseOperationInfo](ReadPreference.primaryPreferred)
-    // build (asynchronously) a list containing all the articles
-    found.collect[List]().map { parseOperations =>
-      Ok(views.html.history(user, parseOperations))
-    }.recover {
-      case e =>
-        e.printStackTrace()
-        BadRequest(e.getMessage)
-    }
+      cursor[ParseOperation](ReadPreference.primaryPreferred)
+    found.collect[List]().map { parseOperations => Ok(views.html.history(user, parseOperations)) }.
+      recover { case e => logger.error(Messages("error.db"), e); BadRequest(e.getMessage) }
   }
 
+  /**
+   * Handles the "Parse History Delete" action.
+   *
+   * @return The result to display.
+   */
   def deleteParseOperation(id: String) = SecuredAction.async { implicit request =>
-    collection.remove(Json.obj("id" -> id))
-      .map{_ => Redirect(routes.MarkdownController.parseHistory)}
+    collection.remove(Json.obj("id" -> id)).
+      map { _ => Redirect(routes.MarkdownController.parseHistory) }.
+      recover { case e => logger.error(Messages("error.db"), e); BadRequest(e.getMessage) }
   }
 }
