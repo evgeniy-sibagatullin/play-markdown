@@ -1,4 +1,31 @@
-This is your new Play application
-=================================
+Play Markdown
+=====================================
 
-This file will be packaged with your application, when using `activator dist`.
+[Play-Markdown on Heroku](https://play-markdown.herokuapp.com/)
+
+The Playframework 2 application with REST service that takes markdown-style text as a POST request body, and returns HTML.
+
+## Stack
+
+[Playframework 2.4](https://www.playframework.com/download)
+[Silhouette](http://silhouette.mohiva.com/)
+[ReactiveMongo](http://reactivemongo.org/)
+
+## Local DB settings
+
+The parser will be working even with no connection to DB, but in order to use the auth feature the DB config has to be updated:
+../conf/application.conf - mongodb entry.
+
+## Further updates
+
+If you perform any dependency update then to launch the app you need to compile project exactly by the native Playframework activator and execute "activator clean compile" in root project folder from cmd. Usage of the present IDEA or Eclipse built-in compilers could lead to unpredictable compile errors.
+
+## Notes
+
+Anyway after the successful activator compilation the IDEA will complain about missing controllers in routes. Such errors will be present in
+../conf/routes, ../app/controllers/_, ../app/views/_ and ../app/utils/Filters.scala
+It is an issue of IDEA plugin, you can launch the app with no worries about it.
+
+## License
+
+The code is licensed under [Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0).
