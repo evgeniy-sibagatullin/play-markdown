@@ -124,6 +124,7 @@ a.btn {
 }
 
 .markdown-input textarea {
+    height: 310px;
     border-radius: 4px!important;
     resize: none;
 }
