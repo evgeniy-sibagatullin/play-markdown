@@ -5,13 +5,13 @@
     "Play",
     "Markdown"
   ],
-  "website": "https://github.com/mohiva/play-silhouette-seed",
-  "repository": "https://github.com/mohiva/play-silhouette-seed",
+  "website": "",
+  "repository": "",
   "success_url": "/",
   "env": {
-    "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-scala.git",
-    "PLAY_CONF_FILE": "application.prod.conf",
-    "PLAY_APP_SECRET": "changeme",
+    "BUILDPACK_URL": "",
+    "PLAY_CONF_FILE": "",
+    "PLAY_APP_SECRET": "",
     "FACEBOOK_CLIENT_ID": "",
     "FACEBOOK_CLIENT_SECRET": "",
     "GOOGLE_CLIENT_ID": "",
