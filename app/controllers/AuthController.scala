@@ -80,9 +80,40 @@ class AuthController @Inject() (
   }
 
   /**
+   * Authenticates a user against a social provider.
+   *
+   * @param provider The ID of the provider to authenticate against.
+   * @return The result to display.
+   */
+  def authenticateProvider(provider: String) = Action.async { implicit request =>
+    (socialProviderRegistry.get[SocialProvider](provider) match {
+      case Some(p: SocialProvider with CommonSocialProfileBuilder) =>
+        p.authenticate().flatMap {
+          case Left(result) => Future.successful(result)
+          case Right(authInfo) => for {
+            profile <- p.retrieveProfile(authInfo)
+            user <- userService.save(profile)
+            authInfo <- authInfoRepository.save(profile.loginInfo, authInfo)
+            authenticator <- env.authenticatorService.create(profile.loginInfo)
+            value <- env.authenticatorService.init(authenticator)
+            result <- env.authenticatorService.embed(value, Redirect(routes.MarkdownController.index()))
+          } yield {
+              env.eventBus.publish(LoginEvent(user, request, request2Messages))
+              result
+            }
+        }
+      case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))
+    }).recover {
+      case e: ProviderException =>
+        logger.error("Unexpected provider error", e)
+        Redirect(routes.AuthController.signIn()).flashing("error" -> Messages("could.not.authenticate"))
+    }
+  }
+
+  /**
    * Authenticates a user against the credentials provider.
    */
-  def authenticate = Action.async { implicit request =>
+  def authenticateCredentials = Action.async { implicit request =>
     SignInForm.form.bindFromRequest.fold(
       form => Future.successful(BadRequest(views.html.signIn(form, socialProviderRegistry))),
       data => {

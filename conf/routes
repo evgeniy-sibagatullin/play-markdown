@@ -6,7 +6,8 @@
 GET         /signIn                          controllers.AuthController.signIn
 GET         /signOut                         controllers.AuthController.signOut
 GET         /signUp                          controllers.AuthController.signUp
-POST        /authenticate                    controllers.AuthController.authenticate
+GET         /authenticate/:provider          controllers.AuthController.authenticateProvider(provider)
+POST        /authenticate/credentials        controllers.AuthController.authenticateCredentials
 POST        /signUp                          controllers.AuthController.signUpPost
 
 GET         /                                controllers.MarkdownController.index

@@ -11,7 +11,7 @@
     }
     <fieldset class="col-md-6 col-md-offset-3">
         <legend>@Messages("sign.in.credentials")</legend>
-        @helper.form(action = routes.AuthController.authenticate()) {
+        @helper.form(action = routes.AuthController.authenticateCredentials()) {
             @helper.CSRF.formField
             @b3.email(signInForm("email"), '_hiddenLabel -> Messages("email"), 'placeholder -> Messages("email"), 'class -> "form-control input-lg")
             @b3.password(signInForm("password"), '_hiddenLabel -> Messages("password"), 'placeholder -> Messages("password"), 'class -> "form-control input-lg")
@@ -26,5 +26,16 @@
         <div>
             <p class="not-a-member">@Messages("sign.in.not.a.member") <a href="@routes.AuthController.signUp">@Messages("sign.in.sign.up.now")</a></p>
         </div>
+
+        @if(socialProviders.providers.nonEmpty) {
+            <div class="social-providers">
+                <p>@Messages("sign.in.or.use.social")</p>
+                <div>
+                @for(p <- socialProviders.providers if p.id != "clef") {
+                    <a href="@routes.AuthController.authenticateProvider(p.id)" class="provider @p.id" title="@Messages(p.id)"><img src="@routes.Assets.at(s"images/providers/${p.id}.png")" width="64px" height="64px" alt="@Messages(p.id)"></a>
+                }
+                </div>
+            </div>
+        }
     </fieldset>
 }
